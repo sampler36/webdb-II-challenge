@@ -57,5 +57,64 @@ router.get("/:id", (req, res) => {
   });
   
 
+router.get("/:id", (req, res) => {
+    // retrieve a zoo by id
+    db("zoos")
+      .where({ id: req.params.id })
+      .then((zoos) => {
+        if (zoos) {
+          res.status(200).json(zoos[0]);
+        } else {
+          res, status(404).json({ message: "zoos not found" });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json(error);
+      });
+    // res.send('Write code to retrieve a zoo by id');
+  });
+  
+  router.post("/", (req, res) => {
+    // add a zoo to the database
+    db("zoos")
+      .insert(req.body)
+      .then(([id]) => {
+        db("zoos")
+          .where({ id })
+          .first()
+          .then((zoos) => {
+            res.status(200).json(zoos);
+          })
+          .catch((error) => {
+            res.status(500).json(error);
+          });
+      });
+  });
+  
+  router.put("/:id", (req, res) => {
+    // update roles
+    db("zoos")
+      .where({ id: req.params.id })
+      .update(req.body)
+      .then((count) => {
+        if (count > 0) {
+          db(zoos)
+            .where({ id: req.params.body })
+            .first()
+            .then((zoos) => {
+              res.status(200).json(zoos);
+            });
+        } else {
+          res.status(404).json({ message: "Zoo not found" });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+            error: "Some useful error message"
+        });
+      });
+  });
+  
+
 
 module.exports = router;
