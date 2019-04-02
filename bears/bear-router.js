@@ -73,7 +73,7 @@ router.get("/:id", (req, res) => {
     .then(count => {
       if(count > 0){
         db(bears)
-        .where({id: req.params.body})
+        .where({id: req.params.id})
         .first()
         .then(bears => {
           res.status(200).json(bears)
